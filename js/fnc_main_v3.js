@@ -479,7 +479,7 @@ function fnc_ShowData() {
             }
          }
 
-         // finalRankingCSV += ary_TempData[ary_SortData[0][i]][1] + ",";
+         finalRankingCSV += ary_TempData[ary_SortData[0][i]][1] + ",";
          if ((int_ResultImg == 2) || (!bln_imgFlag)) {
             new_cell.appendChild(cT(ary_TempData[ary_SortData[0][i]][1]));
          csort4[i] = ary_TempData[ary_SortData[0][i]][1]; // v2a
@@ -510,10 +510,10 @@ function fnc_ShowData() {
       exportDiv.appendChild(cT("To submit your ranking, copy the following text into the Google Form:"));
       exportDiv.appendChild(cE("br"));
 
-      ranking = ary_SortData[0].join(",");
+      // ranking = ary_SortData[0].join(",");
       // ranking = btoa(ranking);
+      ranking = finalRankingCSV.substring(0, finalRankingCSV.length - 1);
       rankingEl = cE("textarea");
-      // sC(rankingEl, "ranking");
       rankingEl.innerHTML = ranking;
       exportDiv.appendChild(rankingEl);
       obj_SelectItem.appendChild(exportDiv);
