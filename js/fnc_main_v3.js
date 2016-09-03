@@ -573,7 +573,7 @@ function fnc_ShowData() {
          if ((obj_TempData[3].length > 0)) {
             var obj_ImageItem = cE("img");
             obj_ImageItem.src = str_ImgPath + obj_TempData[Math.floor(Math.random() * (obj_TempData.length - 3)) + 3];
-            obj_ImageItem.title = obj_TempData[1];
+            // obj_ImageItem.title = obj_TempData[1];
             var obj_Item = cE("span");
             obj_Item.appendChild(obj_ImageItem);
             obj_Item.appendChild(cE("br"));
@@ -582,7 +582,7 @@ function fnc_ShowData() {
             var obj_Item = cE("span");
             obj_Item.appendChild(cT(obj_TempData[1]));
          }
-         obj_Item.title = obj_TempData[1];
+         // obj_Item.title = obj_TempData[1];
          obj_SelectItem.replaceChild(obj_Item, obj_SelectItem.firstChild);
       }
 
