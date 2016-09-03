@@ -193,6 +193,8 @@
       [1, "Sasahara Kojirou", [1, 0], "placeholder.png"],
       [1, "Starla Fey", [1, 0], "placeholder.png"],
       [1, "Pyon", [1, 0], "placeholder.png"],
+      [1, "Sabu", [1, 0], "placeholder.png"],
+      [1, "Sabu's owner", [1, 0], "placeholder.png"],
     ];
 
 
