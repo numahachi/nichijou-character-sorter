@@ -451,6 +451,7 @@ function fnc_ShowData() {
 
       var int_Same = 1;
 
+      var finalRankingCSV = "";
       for (i=0; i<ary_TempData.length; i++) {
          new_row = tbl_body_Result.insertRow(tbl_body_Result.rows.length);
 
@@ -478,6 +479,7 @@ function fnc_ShowData() {
             }
          }
 
+         // finalRankingCSV += ary_TempData[ary_SortData[0][i]][1] + ",";
          if ((int_ResultImg == 2) || (!bln_imgFlag)) {
             new_cell.appendChild(cT(ary_TempData[ary_SortData[0][i]][1]));
          csort4[i] = ary_TempData[ary_SortData[0][i]][1]; // v2a
@@ -499,8 +501,23 @@ function fnc_ShowData() {
             }
          }
       }
+
       var obj_SelectItem = gID("resultField");
       obj_SelectItem.innerHTML = "";
+
+      exportDiv = cE("div")
+      sC(exportDiv, "ranking");
+      exportDiv.appendChild(cT("To submit your ranking, copy the following text into the Google Form:"));
+      exportDiv.appendChild(cE("br"));
+
+      ranking = ary_SortData[0].join(",");
+      // ranking = btoa(ranking);
+      rankingEl = cE("textarea");
+      // sC(rankingEl, "ranking");
+      rankingEl.innerHTML = ranking;
+      exportDiv.appendChild(rankingEl);
+      obj_SelectItem.appendChild(exportDiv);
+
       obj_SelectItem.appendChild(tbl_Result);
 
       if (bln_ResultStyle == 1) {
@@ -544,6 +561,9 @@ function fnc_ShowData() {
       }
       
      // v2a end   
+
+
+
 
    } else {
       // 判定が終了していない場合、選択肢を更新。
