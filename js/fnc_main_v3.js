@@ -13,8 +13,6 @@
 // ・タイトル分類の変更
 // 2013/1/22 Modified by Anonymous
 // added undo function (requires minor changes in index.html and fnc_data.js)
-// 2013/6/26 Modified by xjcl
-// removed image functionality; changed characters to cases
 
 // 実行コードです。
 // 修正する場合は気をつけてください。
@@ -88,7 +86,6 @@ function startup() {
       new_span.onclick = function() {chgFlag(this.id);}
       new_cell.appendChild(new_span);
    }
-
 
    var tbl_foot_Select = cE('tfoot');
    tbl_Select.appendChild(tbl_foot_Select);
@@ -214,32 +211,86 @@ function init(){
    fnc_ShowData();
 }
 
+// *****************************************************************************
+// * Image Initialize
+// * メンテナンス用リスト
+function imginit() {
+   var int_ImgCount = 0;
+   var int_ImgValue = 0;
+   var int_ImgMax = 0;
+
+   var tbl_Image_body = gID('imgTable');
+
+   for (i=0; i<ary_CharacterData.length; i++) {
+      new_row = tbl_Image_body.insertRow(tbl_Image_body.rows.length);
+
+      // Col[0]
+      new_cell = new_row.insertCell(new_row.childNodes.length);
+      new_cell.appendChild(cT(i));
+      sC(new_cell, 'resTableL');
+
+      // Col[1]
+      new_cell = new_row.insertCell(new_row.childNodes.length);
+      new_cell.appendChild(cT(ary_CharacterData[i][1]));
+      sC(new_cell, 'resTableR');
+
+      // Col[2]
+      new_cell = new_row.insertCell(new_row.childNodes.length);
+      for (j=0; j<ary_TitleData.length; j++) {
+         if (ary_CharacterData[i][2][j] == 1) {
+         new_cell.appendChild(cT(ary_TitleData[j]));
+         new_cell.appendChild(cE('br'));
+         }
+      }
+      sC(new_cell, 'resTableR');
+
+      // Col[3]
+      new_cell = new_row.insertCell(new_row.childNodes.length);
+      sC(new_cell, 'resTableR');
+
+      if (ary_CharacterData[i][3].length > 0) {
+         for (j=3; j<ary_CharacterData[i].length;j++) {
+            var new_img = cE('img');
+            new_img.src = str_ImgPath + ary_CharacterData[i][j];
+            new_cell.appendChild(new_img);
+            int_ImgCount++;
+         }
+         int_ImgValue++;
+      }
+      int_ImgMax++;
+   }
+
+   gID("lbl_imgCount").innerHTML = int_ImgCount;
+   gID("lbl_imgParcent").innerHTML = Math.floor((int_ImgValue / int_ImgMax) * 100);
+   gID("lbl_imgValue").innerHTML = int_ImgValue;
+   gID("lbl_imgMax").innerHTML = int_ImgMax;
+}
 
 // Undo previous choice (
 
 function fnc_Undo() {
    if (int_Status == 0) {
       fnc_Sort(0);
-	  return;
+     return;
    }
    
    if(int_Count > 2 && int_Completed != back_int_Completed){
    
-   	//ary_TempData = back_ary_TempData.slice(0);
-	ary_SortData = back_ary_SortData.slice(0);
-	ary_RecordData = back_ary_RecordData.slice(0);
-	int_RecordID = back_int_RecordID;
-	ary_EqualData = back_ary_EqualData.slice(0);
-	ary_ParentData = back_ary_ParentData.slice(0);
-	
-	int_Completed = back_int_Completed;
-	int_Count = int_Count - 2;
-	int_Total = back_int_Total;
-	int_RightList = back_int_RightList;
-	int_RightID = back_int_RightID;
-	int_LeftList = back_int_LeftList;
-	int_LeftID = back_int_LeftID;
-	int_Status = (int_LeftList < 0) ? 2 : 1;
+      //ary_TempData = back_ary_TempData.slice(0);
+   ary_SortData = back_ary_SortData.slice(0);
+   ary_RecordData = back_ary_RecordData.slice(0);
+   int_RecordID = back_int_RecordID;
+   ary_EqualData = back_ary_EqualData.slice(0);
+   ary_ParentData = back_ary_ParentData.slice(0);
+   
+   int_Completed = back_int_Completed;
+   int_Count = int_Count - 2;
+   int_Total = back_int_Total;
+   int_RightList = back_int_RightList;
+   int_RightID = back_int_RightID;
+   int_LeftList = back_int_LeftList;
+   int_LeftID = back_int_LeftID;
+   int_Status = (int_LeftList < 0) ? 2 : 1;
 
    fnc_ShowData();
    }
@@ -248,9 +299,9 @@ function fnc_Undo() {
 /* Debugging purposes (simulates choosing Tie until completion)
 
 function fnc_TieRest(){
-	while(int_Status < 2){
-		fnc_Sort(0);
-	}
+   while(int_Status < 2){
+      fnc_Sort(0);
+   }
 }
 */
 
@@ -259,20 +310,20 @@ function fnc_TieRest(){
 
 function fnc_Sort(int_SelectID) {
 
-	//back_ary_TempData = ary_TempData.slice(0);	
-	back_ary_SortData = ary_SortData.slice(0);
-	back_ary_RecordData = ary_RecordData.slice(0);
-	back_int_RecordID = int_RecordID;
-	back_ary_EqualData = ary_EqualData.slice(0);
-	back_ary_ParentData = ary_ParentData.slice(0);
-	
-	back_int_Completed = int_Completed;
-	back_int_Total = int_Total;
-	back_int_RightList = int_RightList;
-	back_int_RightID = int_RightID;
-	back_int_LeftList = int_LeftList;
-	back_int_LeftID = int_LeftID;
-	
+   //back_ary_TempData = ary_TempData.slice(0); 
+   back_ary_SortData = ary_SortData.slice(0);
+   back_ary_RecordData = ary_RecordData.slice(0);
+   back_int_RecordID = int_RecordID;
+   back_ary_EqualData = ary_EqualData.slice(0);
+   back_ary_ParentData = ary_ParentData.slice(0);
+   
+   back_int_Completed = int_Completed;
+   back_int_Total = int_Total;
+   back_int_RightList = int_RightList;
+   back_int_RightID = int_RightID;
+   back_int_LeftList = int_LeftList;
+   back_int_LeftID = int_LeftID;
+   
    // ステータスにより処理を分岐
    switch (int_Status) {
       case 0:
@@ -368,9 +419,8 @@ function fnc_CountUp(int_Select) {
 // * ShowData
 // * 進捗率と名前を表示する。
 function fnc_ShowData() {
-	
-	
-	
+   
+   
    gID("lblCount").innerHTML = int_Count;
    gID("lblProgress").innerHTML = Math.floor(int_Completed * 100 / int_Total);
    if (!bln_ProgessBar) eGR(sID, Math.floor(int_Completed * 100 / int_Total));
@@ -408,18 +458,30 @@ function fnc_ShowData() {
          new_cell = new_row.insertCell(new_row.childNodes.length);
          sC(new_cell, 'resTableL');
          new_cell.appendChild(cT(int_Result));
-		 
-		 csort2[i] = int_Result; // v2a
-		 
+       
+       csort2[i] = int_Result; // v2a
+       
          // Col[1]
          new_cell = new_row.insertCell(new_row.childNodes.length);
          sC(new_cell, 'resTableR');
 
+         var bln_imgFlag = false;
+         if ((int_ResultImg != 0) && (i < int_ResultRank)) {
+            var new_img = cE('img');
+            var obj_TempData = ary_TempData[ary_SortData[0][i]];
 
-         if ((int_ResultImg == 2)) {
+            if (obj_TempData[3].length > 0) {
+               new_img.src = str_ImgPath + obj_TempData[Math.floor(Math.random() * (obj_TempData.length -3)) + 3];
+               new_cell.appendChild(new_img);
+               new_cell.appendChild(cE('br'));
+               bln_imgFlag = true;
+            }
+         }
+
+         if ((int_ResultImg == 2) || (!bln_imgFlag)) {
             new_cell.appendChild(cT(ary_TempData[ary_SortData[0][i]][1]));
-			csort4[i] = ary_TempData[ary_SortData[0][i]][1]; // v2a
-			csort6[i] = ary_TempData[ary_SortData[0][i]][1]; // v2a
+         csort4[i] = ary_TempData[ary_SortData[0][i]][1]; // v2a
+         csort6[i] = ary_TempData[ary_SortData[0][i]][1]; // v2a
          }
 
          if (i < ary_TempData.length - 1) {
@@ -444,54 +506,62 @@ function fnc_ShowData() {
       if (bln_ResultStyle == 1) {
          gID("mainTable").style.display = 'none';
       }
-	  if (bln_ResultStyle == 0) {
+     if (bln_ResultStyle == 0) {
          gID("ranTable").style.display = 'inline';
       } // v2a
-	  
-	  // v2a start
-	  
-	  for (i=0; i<10; i++) 
-		{
-		if(csort4[i] == undefined)
-			{
-			break;
-			}
-		else
-			{
-			csort +=  csort2[i];
-			csort += '位： ';
-			csort4[i] = csort4[i].replace(/・(.*)/g, "");
-			csort +=  csort4[i];
-			csort += '　';
-			}  
-		}
-			
-		for (i=0; i<130; i++) 
-		{
-		if(csort4[i] == undefined)
-			{
-			break;
-			}
-		else
-			{
-			csort5 +=  csort2[i];
-			csort5 += '. ';
-			csort5 +=  csort6[i];
-			csort5 += '<br>';
-			}
-		}
-		
-	  // v2a end	
+     
+     // v2a start
+     
+     for (i=0; i<10; i++) 
+      {
+      if(csort4[i] == undefined)
+         {
+         break;
+         }
+      else
+         {
+         csort +=  csort2[i];
+         csort += '位： ';
+         csort4[i] = csort4[i].replace(/・(.*)/g, "");
+         csort +=  csort4[i];
+         csort += '　';
+         }  
+      }
+         
+      for (i=0; i<130; i++) 
+      {
+      if(csort4[i] == undefined)
+         {
+         break;
+         }
+      else
+         {
+         csort5 +=  csort2[i];
+         csort5 += '. ';
+         csort5 +=  csort6[i];
+         csort5 += '<br>';
+         }
+      }
+      
+     // v2a end   
 
    } else {
       // 判定が終了していない場合、選択肢を更新。
       for (i=0; i<2; i++) {
          var obj_SelectItem = gID((i == 0) ? "fldLeft" : "fldRight");
          var obj_TempData = ary_TempData[ary_SortData[(i == 0)  ? int_LeftList : int_RightList][(i == 0)  ? int_LeftID : int_RightID]];
-         
+         if ((obj_TempData[3].length > 0)) {
+            var obj_ImageItem = cE("img");
+            obj_ImageItem.src = str_ImgPath + obj_TempData[Math.floor(Math.random() * (obj_TempData.length - 3)) + 3];
+            obj_ImageItem.title = obj_TempData[1];
+            var obj_Item = cE("span");
+            obj_Item.appendChild(obj_ImageItem);
+            obj_Item.appendChild(cE("br"));
+            obj_Item.appendChild(cT(obj_TempData[1]));
+         } else {
             var obj_Item = cE("span");
             obj_Item.appendChild(cT(obj_TempData[1]));
-         
+         }
          obj_Item.title = obj_TempData[1];
          obj_SelectItem.replaceChild(obj_Item, obj_SelectItem.firstChild);
       }
